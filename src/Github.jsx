@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import useSWR from 'swr';
 
 const GitHubRepositories = () => {
-    const [username, setUsername] = useState('');
+    const InputRef = useRef();
     const [page, setPage] = useState(1);
+    const [username, setUsername] = useState("");
     const perPage = 10;
 
     const fetcher = async (url) => {
@@ -21,19 +22,28 @@ const GitHubRepositories = () => {
         setPage((prevPage) => prevPage + 1);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setUsername(InputRef.current.value);
+        setPage(1);
+    }
+
     return (
         <div>
-            <input
-                type="text"
-                placeholder="Enter GitHub username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            {!Array.isArray(data) && <div>No such user!</div>
-            }
-            {error && <div>Error fetching data</div>}
-            {!error && !data && <div>Loading...</div>}
-            {data && Array.isArray(data) && (
+
+            <form action='/submit-form' onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Enter GitHub username"
+                    ref={InputRef}
+                    name='input'
+                    id='input'
+                />
+                <button>Submit</button>
+            </form>
+            {error && <div>Error fetching data. or no such user</div>}
+            {!error && !data && username && <div>Loading...</div>}
+            {data && Array.isArray(data) && !error && (
                 <div>
                     <h2>Repositories for {username}</h2>
                     <ul>

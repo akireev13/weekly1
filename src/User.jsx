@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 
 function User() {
@@ -36,18 +36,22 @@ function User() {
                 <h2>Repositories for {username}</h2>
                 <ul>
                     {data.map((repo) => (
-                        <li key={repo.id}>{repo.name}</li>
+                        <li key={repo.id}><NavLink to={`./${repo.name}`} style={({ isActive }) => ({
+                            color: isActive ? 'red' : 'blue'
+                        })} >{repo.name}</NavLink></li>
                     ))}
                 </ul>
-                <div>
-                    <button onClick={handlePreviousPage} disabled={page === 1}>
-                        Previous Page
-                    </button>
-                    <button onClick={handleNextPage}>Next Page</button>
-                </div>
+                <Outlet />
+
             </div>
         )
         }
+        <div>
+            <button onClick={handlePreviousPage} disabled={page === 1}>
+                Previous Page
+            </button>
+            <button onClick={handleNextPage}>Next Page</button>
+        </div>
         <button onClick={handleHomeClick}>Go to home page</button>
 
     </>);

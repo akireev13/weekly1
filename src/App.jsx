@@ -1,11 +1,17 @@
-import GitHub from "./Github";
+import Form from "./Form";
+import User from "./User";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {
 
 
   return (
-    <div className="app">
-      <GitHub></GitHub>
-    </div>
+    <Router>
+      <Routes>
+        <Route index element={<Form />} />
+        <Route path="/:username" element={<User />} />
+        <Route path="/:username/:repo" />
+      </Routes>
+    </Router>
   );
 }
